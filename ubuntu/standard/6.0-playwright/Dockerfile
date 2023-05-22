@@ -53,13 +53,7 @@ RUN set -ex \
     netbase openssl patch pkg-config procps python3-configobj \
     python3-openssl rsync sgml-base sgml-data \
     tar tcl tcl8.6 tk tk-dev unzip wget xfsprogs xml-core xmlto xsltproc \
-    libzip-dev vim xvfb xz-utils zip zlib1g-dev \   
-    # playwright deps
-    && apt-get install -y -qq --no-install-recommends \
-    libglib2.0-0 libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 \
-    libcups2 libdrm2 libdbus-1-3 libxkbcommon0 libatspi2.0-0 libxcomposite1 \
-    libxdamage libxfixes3 libxrandr2 libgbm1 libpango-1.0-0 \
-    libcairo2 libasound2 \
+    libzip-dev vim xvfb xz-utils zip zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 ENV LC_CTYPE="C.UTF-8"
@@ -182,4 +176,10 @@ COPY amazon-ssm-agent.json /etc/amazon/ssm/amazon-ssm-agent.json
 
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
 
-#=======================END of STD:6.0  =================
+#=======================End of layer: runtimes  =================
+FROM runtimes AS playwright
+
+RUN npm i -g playwright && \
+    npx playwright install && \
+    npx playwright install-deps \
+    #=======================END of STD:6.0  =================
